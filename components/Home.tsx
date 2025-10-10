@@ -1,9 +1,8 @@
 import { useState } from "react";
 import Container from "@/components/Container"
 import {
-	View, Text, StyleSheet, Keyboard,
-	TouchableWithoutFeedback, FlatList,
-	TouchableOpacity,
+	View, Text, StyleSheet, FlatList,
+	TouchableOpacity, Image,
 } from "react-native";
 import { ButtonGradient } from "@/components/common";
 import StoryCard from "@/components/StoryCard";
@@ -69,6 +68,15 @@ export default function Login() {
 	return (
 		<Container>
 			<View style={mainStyles.mainContent}>
+				<View style={[mainStyles.ribbon, { paddingHorizontal: 10 }]}>
+					<Text style={mainStyles.brandText}>Datu</Text>
+					<TouchableOpacity>
+						<Image
+							source={{ uri: "https://skynet.codexp.in/storyapp/6142058503141424113.webp" }}
+							style={styles.thumbnail}
+						/>
+					</TouchableOpacity>
+				</View>
 				<View style={styles.content}>
 					<View style={{ marginVertical: 10 }}>
 						<Text style={[mainStyles.largeText, mainStyles.boldText, mainStyles.buttonText]}>Hi There!</Text>
@@ -94,7 +102,7 @@ export default function Login() {
 							data={cards}
 							renderItem={({ item }) => <StoryCard card={item} />}
 							keyExtractor={item => item._id}
-							style={{ marginVertical: 10, height: "65%" }}
+							style={{ marginVertical: 10, height: "62%" }}
 							showsVerticalScrollIndicator={false}
 							numColumns={2}
 							columnWrapperStyle={{ justifyContent: "space-between" }}
@@ -127,5 +135,11 @@ const styles = StyleSheet.create({
 		paddingVertical: 8,
 		borderRadius: 20,
 		marginHorizontal: 5,
+	},
+	thumbnail: {
+		width: 36,
+		height: 36,
+		borderRadius: 36,
+		resizeMode: "contain",
 	},
 });
