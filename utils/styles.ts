@@ -9,6 +9,7 @@ export const mainStyles = StyleSheet.create({
 	},
 	largeText: { fontSize: 32 },
 	smallText: { fontSize: 14 },
+	extraSmallText: { fontSize: 10 },
 	mediumText: { fontSize: 20 },
 	boldText: { fontWeight: "500" },
 	buttonText: { color: "#FFE8D9" },
