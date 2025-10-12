@@ -20,4 +20,10 @@ export const mainStyles = StyleSheet.create({
 		fontWeight: "400",
 		fontSize: 36,
 	},
+	thumbnail: {
+		width: 36,
+		height: 36,
+		borderRadius: 36,
+		resizeMode: "contain",
+	},
 });

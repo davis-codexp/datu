@@ -82,7 +82,7 @@ export default function Login() {
 					<TouchableOpacity>
 						<Image
 							source={{ uri: "https://skynet.codexp.in/storyapp/6142058503141424113.webp" }}
-							style={styles.thumbnail}
+							style={mainStyles.thumbnail}
 						/>
 					</TouchableOpacity>
 				</View>
@@ -147,12 +147,6 @@ const styles = StyleSheet.create({
 		paddingVertical: 8,
 		borderRadius: 20,
 		marginHorizontal: 5,
-	},
-	thumbnail: {
-		width: 36,
-		height: 36,
-		borderRadius: 36,
-		resizeMode: "contain",
 	},
 	playerContainer: {
 		position: "absolute",
