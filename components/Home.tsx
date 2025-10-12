@@ -7,9 +7,18 @@ import {
 import { ButtonGradient } from "@/components/common";
 import StoryCard from "@/components/StoryCard";
 import { mainStyles } from "@/utils/styles";
-import { CardType } from "@/utils/types";
+import { CardType, Story } from "@/utils/types";
+import PlayerAlt from "@/components/PlayerAlt";
 
 const tags: string[] = ["All", "Action", "Adventure", "Space Travel", "Superhero", "History", "Magic", "Fantasy", "Mystery"];
+const story: Story = {
+	_id: "1001",
+	thumbnail: "https://skynet.codexp.in/storyapp/1789434559218061412.webp",
+	title: "Lily and the Robot Science Adventure",
+	duration: 1,
+	tags: ["Adventure", "Science"],
+	audio: "https://storyapp.codexp.in/gen-story/audio/2f540a2b.wav",
+};
 const cards: CardType[] = [
 	{
 		_id: "1001",
@@ -110,6 +119,9 @@ export default function Login() {
 					</View>
 				</View>
 			</View>
+			<View style={styles.playerContainer}>
+				<PlayerAlt story={story} />
+			</View>
 		</Container>
 	);
 }
@@ -127,7 +139,7 @@ function Tag(props: TagProps) {
 
 const styles = StyleSheet.create({
 	content: {
-		marginTop: "10%",
+		marginTop: "2%",
 		paddingHorizontal: 10,
 	},
 	tag: {
@@ -141,5 +153,12 @@ const styles = StyleSheet.create({
 		height: 36,
 		borderRadius: 36,
 		resizeMode: "contain",
+	},
+	playerContainer: {
+		position: "absolute",
+		top: "90%",
+		width: "100%",
+		paddingHorizontal: 10,
+		zIndex: 1,
 	},
 });

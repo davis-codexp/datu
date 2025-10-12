@@ -48,9 +48,7 @@ export default function Player({ source }: PlayerProps) {
   	return (
     	<View style={styles.player}>
 			<Slider
-				style={{
-					width: "80%",
-				}}
+				style={{ width: "80%" }}
 				minimumValue={0}
 				maximumValue={Math.floor(playerStatus?.duration || 1)}
 				value={Math.floor(playerStatus?.currentTime || 0)}
@@ -113,7 +111,7 @@ export default function Player({ source }: PlayerProps) {
 				</View>
 			</Modal>
     	</View>
-  );	
+	);	
 }
 
 const styles = StyleSheet.create({

@@ -1,8 +1,8 @@
-import Story from "@/components/Story";
+import Home from "@/components/Home";
 
 export default function Index() {
 	return (
-		<Story />	
+		<Home />	
 	);
 }
 
