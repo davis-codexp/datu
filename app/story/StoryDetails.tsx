@@ -5,46 +5,44 @@ import { mainStyles } from "@/utils/styles";
 import { LinearGradient } from "expo-linear-gradient";
 import Player from "@/components/Player";
 import Ionicons from "@react-native-vector-icons/ionicons"
+import { useLocalSearchParams, router } from "expo-router";
+import { Story } from "@/utils/types";
 
-const source = "https://storyapp.codexp.in/gen-story/audio/2f540a2b.wav";
-export default function Story() {
+export default function StoryDetails() {
 	const [showPlayer, setShowPlayer] = useState(false);
+	const { data } = useLocalSearchParams<{ data: string }>();
+	const story: Story = data ? JSON.parse(data) : null;
 
 	return (
 		<View style={{ flex: 1}}>
 			<Image
-				source={{ uri: "https://skynet.codexp.in/storyapp/1789434559218061412.webp" }}
+				source={{ uri: story?.thumbnail }}
 				style={{ height: "32%", width: "100%" }}
 			/>
 			<SafeAreaView style={styles.content}>
-				<TouchableOpacity style={styles.backBtn}>
+				<TouchableOpacity style={styles.backBtn} onPress={router.back}>
 					<Ionicons name="chevron-back" size={24} color="#FAFAFA" />
 				</TouchableOpacity>
 				<View style={styles.titleContainer}>
-					<Text style={styles.titleText}>
-			Lily and the Robot Science Adventure
-					</Text>
+					<Text style={styles.titleText}>{story?.title}</Text>
 					<View style={[mainStyles.row, {justifyContent: "flex-start"}]}>
-						<TouchableOpacity style={styles.tagItem}>
-							<Text style={{ color: "white" }}>Action</Text>
-						</TouchableOpacity>
-						<TouchableOpacity style={styles.tagItem}>
-							<Text style={{ color: "white" }}>Action</Text>
-						</TouchableOpacity>
+						{story?.tags?.map((tag: string) => (
+							<TouchableOpacity key={tag} style={styles.tagItem}>
+								<Text style={{ color: "white" }}>{tag?.toUpperCase()}</Text>
+							</TouchableOpacity>
+						))}
 					</View>
 				</View>
 				<ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
 					<Text style={[mainStyles.buttonText, { fontSize: 14, lineHeight: 22, letterSpacing: 0.15, textAlign: "justify" }]}>
-						Rosie the rabbit loved to help her friends in the forest. One sunny day, her friend Benny the beaver needed help building a new dam. Rosie said, "I can do it!" and started to dig. But she dug too deep and made a big hole. Benny's dam started to leak. Rosie felt sad and said, "Oh no! I made a mistake!" Benny said, "It's okay, Rosie. We can fix it together." Rosie and Benny worked together and fixed the dam. Rosie learned that making mistakes is okay, and it's always good to ask for help when you need it. Rosie felt happy and proud to help her friend Benny.
-Rosie the rabbit loved to help her friends in the forest. One sunny day, her friend Benny the beaver needed help building a new dam. Rosie said, "I can do it!" and started to dig. But she dug too deep and made a big hole. Benny's dam started to leak. Rosie felt sad and said, "Oh no! I made a mistake!" Benny said, "It's okay, Rosie. We can fix it together." Rosie and Benny worked together and fixed the dam. Rosie learned that making mistakes is okay, and it's always good to ask for help when you need it. Rosie felt happy and proud to help her friend Benny.
-Rosie the rabbit loved to help her friends in the forest. One sunny day, her friend Benny the beaver needed help building a new dam. Rosie said, "I can do it!" and started to dig. But she dug too deep and made a big hole. Benny's dam started to leak. Rosie felt sad and said, "Oh no! I made a mistake!" Benny said, "It's okay, Rosie. We can fix it together." Rosie and Benny worked together and fixed the dam. Rosie learned that making mistakes is okay, and it's always good to ask for help when you need it. Rosie felt happy and proud to help her friend Benny.
+						{story?.text}	
 					</Text>
 				</ScrollView>
 				{showPlayer ? (
-					<Player source={source} />
+					<Player source={story?.audio ?? ""} />
 				) : (
 					<View style={[mainStyles.ribbon, { paddingHorizontal: 20, marginTop: 10 }]}>
-						<TouchableOpacity style={styles.button}>
+						<TouchableOpacity style={styles.button} onPress={() => router.push("/MyStories")}>
 							<Text style={[mainStyles.buttonText, mainStyles.boldText, mainStyles.mediumText]}>My Stories</Text>
 						</TouchableOpacity>
 						<LinearGradient

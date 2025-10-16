@@ -6,17 +6,23 @@ import Slider from "@react-native-community/slider";
 import { mainStyles } from "@/utils/styles";
 import { Story } from "@/utils/types";
 import { formatDuration } from "@/utils/helpers";
+import { storyURI } from "@/utils/api";
 
 type PlayerAltProps = {
 	story: Story
+	closeHandler: () => void;
 };
 
-export default function PlayerAlt({ story }: PlayerAltProps) {
-	const player = useAudioPlayer(story?.audio ?? "");
+export default function PlayerAlt({ story, closeHandler }: PlayerAltProps) {
+	const player = useAudioPlayer(`${storyURI}/${story?.audio ?? ""}`);
 	const playerStatus = useAudioPlayerStatus(player);
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [showModal, setShowModal] = useState(false);
 	const [playbackRate, setPlaybackRate] = useState(1);
+
+	useEffect(() => {
+		setIsPlaying(false);
+	}, [story]);
 
 	const setRate = (rate: number) => {
 		player.setPlaybackRate(rate);
@@ -82,7 +88,18 @@ export default function PlayerAlt({ story }: PlayerAltProps) {
 					</>
 				}	
 			</View>		
-			<TouchableOpacity style={{ position: "absolute", left: "92%", top: "1%", width: 30, justifyContent: "center", alignItems: "center", height: 25 }}>
+			<TouchableOpacity
+				style={{
+					position: "absolute",
+					left: "92%",
+					top: "1%",
+					width: 30,
+					justifyContent: "center",
+					alignItems: "center",
+					height: 25,
+				}}
+				onPress={closeHandler}
+			>
 				<Ionicons name="close" color="#FAFAFA" size={18} />
 			</TouchableOpacity>
 		</View>

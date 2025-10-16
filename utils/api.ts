@@ -15,13 +15,14 @@ axios.defaults.headers.put["Content-Type"] = "application/json";
 axios.defaults.withCredentials = true;
 
 export const setAuthHeader = (token: string) => {
-	//axios.defaults.headers.Cookie = `authorization=${token}`;
-  	axios.defaults.headers.Cookie = `authorization=$2a$12$yPczsiG1ykyDGgfpAPb4u.zgWkqKtmDAZBGqXfyCln21.91PITSvy`;
+	axios.defaults.headers.Cookie = `authorization=${token}`;
+  	//axios.defaults.headers.Cookie = `authorization=$2a$12$FMXAmLt31i69VS.LQDPJGOK.8VGUs.IPZPaWzOFsqa7T6eG/lfxE6`;
 };
 export const clearAuthHeader = () => {
   	axios.defaults.headers.Cookie = null;
 };
 export const imageURL = "https://skynet.codexp.in/storyapp";
+export const storyURI = "https://storyapp.codexp.in/gen-story/audio";
 export const signup = (body: User) => callApi(`/auth/signup`, "POST", body);
 export const getOtp = (body: LoginForm) => callApi("/auth/otp", "POST", body);
 export const verifyOtp = (body: LoginForm) => callApi("/auth/otp/verify", "POST", body);
@@ -37,6 +38,7 @@ export const getStories = (
 export const getStoryById = (id: string): Promise<ApiSingleResponse<any>> => callApi(`/stories/${id}`, "GET");
 export const addStory = (body: Story): Promise<ApiResponse<any>> => callApi("/stories", "POST", body);
 export const getProfile = (id: string) => callApi(`/users/${id}`, "GET");
+export const updateProfile = (id: string, body: any) => callApi(`/users/${id}`, "PUT", body);
 export const getMetadata = (): Promise<ApiSingleResponse<any>> => callApi(`/stories/metadata/list`, "GET");
 export const createStory = (
 	age: string,

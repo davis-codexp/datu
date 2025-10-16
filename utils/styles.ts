@@ -13,6 +13,7 @@ export const mainStyles = StyleSheet.create({
 	mediumText: { fontSize: 20 },
 	boldText: { fontWeight: "500" },
 	buttonText: { color: "#FFE8D9" },
+	linkText: { fontWeight: "500", color: "#470BE5" },
 	row: { flexDirection: "row", flexWrap: "wrap" },
 	ribbon: { flexDirection: "row", justifyContent: "space-between", flexWrap: "nowrap" },
 	brandText: {

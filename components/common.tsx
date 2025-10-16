@@ -7,6 +7,7 @@ type InputProps = {
 	isSecureText: boolean;
 	changeHandler: (val: string) => void;
 	value: string;
+	keyboardType?: string;
 };
 
 type ButtonProps = {
@@ -29,6 +30,7 @@ export function InputBoxGradient(props: InputProps) {
 				onChangeText={props.changeHandler}
 				placeholderTextColor="rgba(255, 255, 255, 0.5)"
 				value={props.value}
+				keyboardType={props?.keyboardType ?? "default"}
 			/>
 		</LinearGradient>
   	);

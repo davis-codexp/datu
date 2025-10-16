@@ -2,28 +2,38 @@ import {
 	ImageBackground, StyleSheet, TouchableOpacity,
 	View, Text,
 } from "react-native";
-import { CardType } from "@/utils/types";
+import { Story } from "@/utils/types";
+import Ionicons from "@react-native-vector-icons/ionicons";
+import { router } from "expo-router";
 
 type CardProps = {
-	card: CardType,
+	story: Story,
+	clickHandler: (val: Story) => void;
 };
 
-export default function StoryCard({ card }: CardProps) {
+export default function StoryCard({ story, clickHandler }: CardProps) {
+	const goToDetails = () => {
+		router.push({
+			pathname: "/story/StoryDetails",
+			params: { data: JSON.stringify(story)},
+		});
+	};
+
 	return (
-		<View style={styles.container}>
-      		<ImageBackground source={{ uri: card.image }} style={styles.backgroundImage}>
+		<TouchableOpacity style={styles.container} onPress={goToDetails}>
+      		<ImageBackground source={{ uri: story?.thumbnail }} style={styles.backgroundImage}>
         		<View style={styles.overlay}>
 					<View style={{ backgroundColor: "#161128", opacity: 0.9, padding: 10 }}>
-						<Text style={styles.title}>{card.title}</Text>
-						<Text numberOfLines={1} style={styles.subtitle}>{card.tags}</Text>
-						<Text style={styles.subtitle}>{card.duration} mins read</Text>
-						<TouchableOpacity style={styles.playButton}>
-							<Text style={styles.playButtonText}>▶</Text>
+						<Text style={styles.title}>{story?.title}</Text>
+						<Text numberOfLines={1} style={styles.subtitle}>{story?.tags?.join(", ")}</Text>
+						<Text style={styles.subtitle}>{story?.duration} mins read</Text>
+						<TouchableOpacity style={styles.playButton} onPress={() => clickHandler(story)}>
+							<Ionicons name="play-outline" size={18} color="#FAFAFA" />
 						</TouchableOpacity>
 					</View>
 				</View>
 			</ImageBackground>
-    	</View>
+    	</TouchableOpacity>
 	);	
 }
 
@@ -34,7 +44,7 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		marginBottom: 10,
 		overflow: "hidden",
-		backgroundColor: "red",
+		backgroundColor: "#100D18",
 	},
 	backgroundImage: {
 		flex: 1,
@@ -71,7 +81,7 @@ const styles = StyleSheet.create({
 	},
 	playButton: {
 		position: "absolute",
-		top: "65%",
+		top: "55%",
 		left: "85%",
 		backgroundColor: "#4947A1",
 		opacity: 0.8,
@@ -80,9 +90,5 @@ const styles = StyleSheet.create({
 		borderRadius: 16,
 		justifyContent: "center",
 		alignItems: "center",
-	},
-	playButtonText: {
-		color: "#FAFAFA",
-		fontSize: 18,
 	},
 });

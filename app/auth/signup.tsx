@@ -1,8 +1,14 @@
 import { useState } from "react";
 import Container from "@/components/Container"
-import { View, Text, StyleSheet, Keyboard, TouchableWithoutFeedback } from "react-native";
+import {
+	View, Text, StyleSheet, Keyboard,
+	TouchableWithoutFeedback, TouchableOpacity,
+} from "react-native";
 import { InputBoxGradient, ButtonGradient } from "@/components/common";
 import { mainStyles } from "@/utils/styles";
+import { showNotification } from "@/utils/helpers";
+import Ionicons from "@react-native-vector-icons/ionicons";
+import { router } from "expo-router";
 
 export default function SignUp() {
 	const [name, setName] = useState("")
@@ -12,6 +18,7 @@ export default function SignUp() {
 
 	const getOtp = () => {
 		setScreen(2);
+		showNotification("info", "An OTP has been sent to your email");
 	};
 
 	const verifyOtp = () => {
@@ -20,12 +27,18 @@ export default function SignUp() {
 	};
 
 	return (
-		<Container>
+		<Container>	
 			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 				<View style={mainStyles.mainContent}>
+					<TouchableOpacity
+						onPress={router.back}
+						style={[mainStyles.row, { alignItems: "center" }]}
+					>
+						<Ionicons name="chevron-back" size={28} color="#FAFAFA" />
+						<Text style={mainStyles.buttonText}>Log In</Text>
+					</TouchableOpacity>
 					<View style={styles.content}>
-						<Text style={[mainStyles.largeText, mainStyles.boldText, mainStyles.buttonText]}>Welcome</Text>
-						<Text style={[mainStyles.largeText, mainStyles.boldText, mainStyles.buttonText]}>StoryHead!</Text>
+						<Text style={[mainStyles.largeText, mainStyles.boldText, mainStyles.buttonText]}>Welcome StoryHead!</Text>
 						{screen === 1 ? (
 							<View style={styles.formContent}>
 								<Text style={[mainStyles.smallText, mainStyles.boldText, mainStyles.buttonText]}>Create an account to continue!</Text>

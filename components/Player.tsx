@@ -5,13 +5,14 @@ import { formatDuration } from "@/utils/helpers";
 import Ionicons from "@react-native-vector-icons/ionicons"
 import Slider from "@react-native-community/slider";
 import { mainStyles } from "@/utils/styles";
+import { storyURI } from "@/utils/api";
 
 type PlayerProps = {
 	source: string;
 };
 
 export default function Player({ source }: PlayerProps) {
-	const player = useAudioPlayer(source);
+	const player = useAudioPlayer(`${storyURI}/${source}`);
 	const playerStatus = useAudioPlayerStatus(player);
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [showModal, setShowModal] = useState(false);
