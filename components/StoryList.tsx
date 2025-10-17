@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import {
+	View, Text, ActivityIndicator, FlatList, StyleSheet,
+	TouchableOpacity, RefreshControl,
+} from "react-native";
 import StoryCard from "@/components/StoryCard";
 import { mainStyles } from "@/utils/styles";
 import { Story, Metadata } from "@/utils/types";
@@ -23,13 +26,19 @@ export default function StoryList({ listHeight, playerPosition }: StoryListProps
 	const [metadata, setMetadata]= useState<Metadata | null>(null);
 	const [story, setStory] = useState<Story | null>(null);
 	const [activeTag, setActiveTag] = useState("All");
+	const [isLoading, setIsLoading] = useState(true);
 	
 	const clickHandler = (story: Story) => {
 		setStory(story);
 	};
 
 	useEffect(() => {
+		fetchStories();	
+	}, []);
+
+	const fetchStories = () => {
 		asyncHandler(async () => {
+			setIsLoading(true);
 			const response = await getStories();
 			if (response?.success && response?.result) {
 				setStories(response?.result?.list ?? []);
@@ -38,9 +47,12 @@ export default function StoryList({ listHeight, playerPosition }: StoryListProps
 			if (metadata_response?.success && metadata_response?.result) {
 				setMetadata(metadata_response?.result ?? null);
 			}
-		});
-	}, []);
+		}, undefined, () => setIsLoading(false));
+	};
 
+	if (isLoading && stories.length === 0) return <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+		<ActivityIndicator size="large" color="#FAFAFA" />
+	</View>;
 	return (
 		<View style={styles.content}>
 			<View style={{ marginVertical: 10 }}>
@@ -56,13 +68,21 @@ export default function StoryList({ listHeight, playerPosition }: StoryListProps
 			</View>
 			<View style={{ marginVertical: 10 }}>
 				<FlatList
-					data={stories}
+					data={stories ?? []}
 					renderItem={({ item }) => <StoryCard story={item} clickHandler={clickHandler} />}
 					keyExtractor={item => item._id}
 					style={{ marginVertical: 10, height: listHeight }}
 					showsVerticalScrollIndicator={false}
 					numColumns={2}
 					columnWrapperStyle={{ justifyContent: "space-between" }}
+					refreshControl={
+						<RefreshControl
+							refreshing={isLoading}
+							onRefresh={fetchStories}
+							tintColor="#007AFF"
+							colors={['#007AFF']}
+						/>
+        			}
 				/>
 			</View>
 			{story &&

@@ -21,8 +21,15 @@ export default function PlayerAlt({ story, closeHandler }: PlayerAltProps) {
 	const [playbackRate, setPlaybackRate] = useState(1);
 
 	useEffect(() => {
-		setIsPlaying(false);
+		player.play();
 	}, [story]);
+
+	useEffect(() => {
+		if (playerStatus?.isLoaded) {
+			setIsPlaying(true);
+			player.play();
+		}
+	}, [playerStatus?.isLoaded]);
 
 	const setRate = (rate: number) => {
 		player.setPlaybackRate(rate);
@@ -53,7 +60,7 @@ export default function PlayerAlt({ story, closeHandler }: PlayerAltProps) {
 			/>
 			<View style={{ width: "65%" }}>
 				<Text numberOfLines={1} style={[mainStyles.buttonText]}>{story.title}</Text>
-				<Text style={[mainStyles.buttonText, mainStyles.extraSmallText]}>
+				<Text numberOfLines={1} style={[mainStyles.buttonText, mainStyles.extraSmallText]}>
 					{story?.tags?.join(", ")}
 				</Text>
 				<Slider
@@ -83,11 +90,24 @@ export default function PlayerAlt({ story, closeHandler }: PlayerAltProps) {
 							<TouchableOpacity style={styles.playButton} onPress={() => replay()}>
 								<Ionicons name="reload-outline" size={24} color="#FFE8D9" />
 							</TouchableOpacity>
-						)}
-						
+						)}	
 					</>
 				}	
-			</View>		
+			</View>
+			<TouchableOpacity
+				style={{
+					position: "absolute",
+					left: "82%",
+					top: "1%",
+					width: 30,
+					height: 25,
+					justifyContent: "center",
+					alignItems: "center"
+				}}
+				onPress={toggleModal}
+			>
+				<Ionicons name="settings-outline" size={18} color="#FAFAFA" />
+			</TouchableOpacity>
 			<TouchableOpacity
 				style={{
 					position: "absolute",
@@ -101,7 +121,35 @@ export default function PlayerAlt({ story, closeHandler }: PlayerAltProps) {
 				onPress={closeHandler}
 			>
 				<Ionicons name="close" color="#FAFAFA" size={18} />
-			</TouchableOpacity>
+			</TouchableOpacity>	
+			<Modal
+				animationType="fade"
+				transparent={true}
+				visible={showModal}
+				onRequestClose={toggleModal}
+			>
+				<View style={styles.modal}>
+					<View style={[styles.modalContent]}>
+						<View style={[mainStyles.ribbon, { marginBottom: 10 }]}>
+							<Text style={[mainStyles.buttonText]}>Playback Speed</Text>
+							<TouchableOpacity style={{ height: 20, width: 30, justifyContent: "center", alignItems: "center" }} onPress={toggleModal}>
+								<Ionicons name="close" size={18} color="#FAFAFA" />
+							</TouchableOpacity>
+						</View>
+						<View style={styles.modalButtons}>
+							{[0.5, 0.75, 1, 1.25, 1.75, 2].map((rate: number) => (
+								<TouchableOpacity
+									key={rate}
+									style={[styles.modalButton, playbackRate === rate && styles.modalButtonSelected ]}
+									onPress={() => setRate(rate)}
+								>
+									<Text style={[ mainStyles.extraSmallText, mainStyles.buttonText, playbackRate === rate && styles.modalButtonTextSelected]}>{rate}x</Text>
+								</TouchableOpacity>
+							))}
+						</View>
+					</View>
+				</View>
+			</Modal>
 		</View>
 	);
 }
@@ -133,4 +181,39 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		margin: 10,
 	},
+	modal: {
+		flex: 1,
+    	justifyContent: 'center',
+    	alignItems: 'center',
+    	backgroundColor: 'rgba(0, 0, 0, 0.5)',
+	},
+	modalContent: {
+		backgroundColor: "#100D18",
+    	borderRadius: 10,
+    	padding: 20,
+    	width: '60%',
+	},
+	modalButtons: {
+    	width: '100%',
+		flexDirection: "row",
+		justifyContent: "space-around",
+		flexWrap: "wrap",
+  	},
+	modalButton: {
+    	padding: 10,
+    	borderRadius: 50,
+    	backgroundColor: "gray",
+		height: 50,
+    	width: 50,
+		alignItems: "center",
+		justifyContent: "center",
+		margin: 3,
+  	},
+	modalButtonSelected: {
+    	backgroundColor: '#007AFF',
+  	},
+  	modalButtonTextSelected: {
+  		color: '#FFFFFF',
+    	fontWeight: 'bold',
+  	},
 });

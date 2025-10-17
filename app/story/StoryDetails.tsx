@@ -7,6 +7,7 @@ import Player from "@/components/Player";
 import Ionicons from "@react-native-vector-icons/ionicons"
 import { useLocalSearchParams, router } from "expo-router";
 import { Story } from "@/utils/types";
+import { formatDuration } from "@/utils/helpers";
 
 export default function StoryDetails() {
 	const [showPlayer, setShowPlayer] = useState(false);
@@ -25,8 +26,9 @@ export default function StoryDetails() {
 				</TouchableOpacity>
 				<View style={styles.titleContainer}>
 					<Text style={styles.titleText}>{story?.title}</Text>
+					<Text style={[mainStyles.smallText, { color: "#FAFAFA", opacity: 0.8, marginVertical: 3 }]}>{story?.duration} min</Text>
 					<View style={[mainStyles.row, {justifyContent: "flex-start"}]}>
-						{story?.tags?.map((tag: string) => (
+						{story?.tags?.splice(0, 3)?.map((tag: string) => (
 							<TouchableOpacity key={tag} style={styles.tagItem}>
 								<Text style={{ color: "white" }}>{tag?.toUpperCase()}</Text>
 							</TouchableOpacity>
