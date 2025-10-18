@@ -36,6 +36,8 @@ export default function Login() {
 			  		if (response?.success) {
 				  		setScreen(2);
 				  		message = response?.message || "OTP has been sent to your email.";
+						showNotification("success", message);
+						Keyboard.dismiss();
 			  		} else {
 				  		showNotification(
 							"error", response?.message || "This email is not registered. Please sign up."

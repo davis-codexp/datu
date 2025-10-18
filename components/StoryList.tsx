@@ -24,6 +24,7 @@ type StoryListProps = {
 export default function StoryList({ listHeight, playerPosition }: StoryListProps) {
 	const [stories, setStories] = useState<Story[]>([]);
 	const [metadata, setMetadata]= useState<Metadata | null>(null);
+	const [tags, setTags] = useState(["All"]);
 	const [story, setStory] = useState<Story | null>(null);
 	const [activeTag, setActiveTag] = useState("All");
 	const [isLoading, setIsLoading] = useState(true);
@@ -36,18 +37,26 @@ export default function StoryList({ listHeight, playerPosition }: StoryListProps
 		fetchStories();	
 	}, []);
 
-	const fetchStories = () => {
+	const fetchStories = (tagVal = activeTag) => {
 		asyncHandler(async () => {
 			setIsLoading(true);
-			const response = await getStories();
+			const response = await getStories(tagVal);
 			if (response?.success && response?.result) {
 				setStories(response?.result?.list ?? []);
 			}
 			const metadata_response = await getMetadata();
 			if (metadata_response?.success && metadata_response?.result) {
 				setMetadata(metadata_response?.result ?? null);
+				if (metadata_response?.result?.categories?.length > 0) {
+					setTags(["All", ...metadata_response?.result?.categories]);
+				}
 			}
 		}, undefined, () => setIsLoading(false));
+	};
+
+	const tagHandler = (val: string) => {
+		setActiveTag(val);
+		fetchStories(val);
 	};
 
 	if (isLoading && stories.length === 0) return <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -58,8 +67,8 @@ export default function StoryList({ listHeight, playerPosition }: StoryListProps
 			<View style={{ marginVertical: 10 }}>
 				<Text style={[mainStyles.mediumText, mainStyles.boldText, mainStyles.buttonText]}>My Stories</Text>
 				<FlatList
-					data={metadata?.categories ?? []}
-					renderItem={({ item }) => <Tag tag={item} activeTag={activeTag} onClick={setActiveTag} />}
+					data={tags ?? []}
+					renderItem={({ item }) => <Tag tag={item} activeTag={activeTag} onClick={tagHandler} />}
 					keyExtractor={item => item}
 					horizontal={true}
 					style={{ marginVertical: 10 }}

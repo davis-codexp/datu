@@ -27,9 +27,9 @@ export const signup = (body: User) => callApi(`/auth/signup`, "POST", body);
 export const getOtp = (body: LoginForm) => callApi("/auth/otp", "POST", body);
 export const verifyOtp = (body: LoginForm) => callApi("/auth/otp/verify", "POST", body);
 export const getStories = (
+	category = "",
 	offset = 0,
   	limit = 100,
-  	category = "",
 ): Promise<ApiResponse<Story>> =>
   	callApi(
     	`/stories?offset=${offset}&limit=${limit}&category=${category}`,

@@ -1,4 +1,5 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { useState } from "react";
+import { View, Modal, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import Ionicons from "@react-native-vector-icons/ionicons";
 import { mainStyles } from "@/utils/styles";
 import { User, Credentials } from "@/utils/types";
@@ -13,6 +14,8 @@ type ProfileProps = {
 };
 
 export default function Profile({ onClose, cred, setCredentials }: ProfileProps) {
+	const [showModal, setShowModal] = useState(false);
+
 	async function logoutHandler() {
     	await logout();
     	clearAuthHeader();
@@ -63,7 +66,7 @@ export default function Profile({ onClose, cred, setCredentials }: ProfileProps)
 					...cred?.user,
 					image: response?.data?.result,
 				};
-				//await updateProfile(user?._id ?? "", body);
+				await updateProfile(body?._id ?? "", body);
 				await saveItem("credentials", {...cred, user: body});	
 				setCredentials({...cred, user: body});
             } else {
@@ -106,18 +109,42 @@ export default function Profile({ onClose, cred, setCredentials }: ProfileProps)
 					<Text style={[mainStyles.buttonText, mainStyles.smallText, mainStyles.boldText]}>{cred?.user?.gender}</Text>
 				</View>
 				<View style={[mainStyles.ribbon, { marginTop: 20, paddingRight: 40 }]}>
-					<TouchableOpacity style={[mainStyles.row, { alignItems: "center" }]}>
-						<Ionicons name="pencil-outline" size={18} color="#FAFAFA" />
-						<Text style={[mainStyles.buttonText, mainStyles.smallText, mainStyles.boldText, { marginLeft: 5 }]}>Edit Profile</Text>
-					</TouchableOpacity>
-					<TouchableOpacity onPress={logoutHandler} style={[mainStyles.row, { alignItems: "center" }]}>
+					<View></View>	
+					<TouchableOpacity onPress={() => setShowModal(true)} style={[mainStyles.row, { alignItems: "center" }]}>
 						<Ionicons name="power-outline" size={18} color="#FAFAFA" />
 						<Text style={[mainStyles.buttonText, mainStyles.smallText, mainStyles.boldText, { marginLeft: 5 }]}>Logout</Text>
 					</TouchableOpacity>
 				</View>
 			</View>
+			<Modal
+        		animationType="slide"
+        		transparent={true}
+        		visible={showModal}
+				onRequestClose={() => setShowModal(false)}
+			>
+        		<View style={styles.logoutContainer}>
+          			<View style={styles.logoutContent}>
+            			<Text style={{ fontSize: 20, marginBottom: 10, fontWeight: "bold"}}>
+              				Are you sure you want to Log Out?
+            			</Text>
+            			<View style={[mainStyles.ribbon]}>
+              				<TouchableOpacity
+                				style={[mainStyles.button, mainStyles.alphaBtn]}
+								onPress={() => setShowModal(false)}
+							>
+                				<Text style={[mainStyles.buttonText]}>CANCEL</Text>
+              				</TouchableOpacity>
+              				<TouchableOpacity
+                				style={[mainStyles.button, mainStyles.dangerBtn]}
+								onPress={logoutHandler}
+							>
+                				<Text style={[mainStyles.buttonText]}>CONFIRM</Text>
+              				</TouchableOpacity>
+            			</View>
+          			</View>
+        		</View>
+      		</Modal>
 		</View>
-		
 	);
 }
 
@@ -152,4 +179,17 @@ const styles = StyleSheet.create({
 		borderRadius: 60,
 		marginTop: "-52%",
 	},
+	logoutContainer: {
+    	flex: 1,
+    	justifyContent: "center",
+    	paddingLeft: 10,
+    	paddingRight: 10,
+    	backgroundColor: "rgba(0, 0, 0, 0.5)",
+  	},
+  	logoutContent: {
+    	backgroundColor: "rgb(255, 255, 255)",
+    	padding: 20,
+    	borderRadius: 10,
+    	alignItems: "center",
+  	},
 });

@@ -27,4 +27,15 @@ export const mainStyles = StyleSheet.create({
 		borderRadius: 36,
 		resizeMode: "contain",
 	},
+	button: {
+    	margin: 5,
+    	padding: 10,
+    	borderRadius: 20,
+  	},
+  	alphaBtn: {
+    	backgroundColor: "#7966FF",
+  	},
+	dangerBtn: {
+    	backgroundColor: "#FA1604",
+  	},
 });
