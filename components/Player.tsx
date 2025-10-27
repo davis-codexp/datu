@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
 		flexWrap: "wrap",
   	},
 	modalButton: {
-    	padding: 10,
+    	padding: 8,
     	borderRadius: 50,
     	backgroundColor: "gray",
 		height: 50,

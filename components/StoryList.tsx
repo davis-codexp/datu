@@ -5,7 +5,7 @@ import {
 } from "react-native";
 import StoryCard from "@/components/StoryCard";
 import { mainStyles } from "@/utils/styles";
-import { Story, Metadata } from "@/utils/types";
+import { Story } from "@/utils/types";
 import PlayerAlt from "@/components/PlayerAlt";
 import { getStories, getMetadata } from "@/utils/api";
 import { asyncHandler, capitalizeFirstLetter } from "@/utils/helpers"
@@ -23,7 +23,6 @@ type StoryListProps = {
 
 export default function StoryList({ listHeight, playerPosition }: StoryListProps) {
 	const [stories, setStories] = useState<Story[]>([]);
-	const [metadata, setMetadata]= useState<Metadata | null>(null);
 	const [tags, setTags] = useState(["All"]);
 	const [story, setStory] = useState<Story | null>(null);
 	const [activeTag, setActiveTag] = useState("All");
@@ -35,6 +34,7 @@ export default function StoryList({ listHeight, playerPosition }: StoryListProps
 
 	useEffect(() => {
 		fetchStories();	
+		getTags();
 	}, []);
 
 	const fetchStories = (tagVal = activeTag) => {
@@ -44,14 +44,20 @@ export default function StoryList({ listHeight, playerPosition }: StoryListProps
 			if (response?.success && response?.result) {
 				setStories(response?.result?.list ?? []);
 			}
+			
+			setIsLoading(false);
+		}, () => setIsLoading(false));
+	};
+
+	const getTags = () => {
+		asyncHandler(async () => {
 			const metadata_response = await getMetadata();
 			if (metadata_response?.success && metadata_response?.result) {
-				setMetadata(metadata_response?.result ?? null);
 				if (metadata_response?.result?.categories?.length > 0) {
 					setTags(["All", ...metadata_response?.result?.categories]);
 				}
 			}
-		}, undefined, () => setIsLoading(false));
+		});
 	};
 
 	const tagHandler = (val: string) => {
@@ -131,7 +137,7 @@ const styles = StyleSheet.create({
 	playerContainer: {
 		position: "absolute",
 		width: "100%",
-		paddingHorizontal: 10,
+		paddingHorizontal: 5,
 		zIndex: 1,
 	},
 });

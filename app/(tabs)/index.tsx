@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Container from "@/components/Container";
 import {
-	View, Text, StyleSheet, Modal,
+	View, Text, StyleSheet, Modal, Platform,
 } from "react-native";
 import { ButtonGradient } from "@/components/common";
 import { mainStyles } from "@/utils/styles";
@@ -44,8 +44,8 @@ export default function Home() {
 					/>
 				</View>
 				<StoryList
-					listHeight="67%"
-					playerPosition="70%"
+					listHeight={Platform.OS === "android" ? "65%" : "70%"}
+					playerPosition="68%"
 				/>
 			</View>
 			{credentials &&

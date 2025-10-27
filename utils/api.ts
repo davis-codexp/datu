@@ -76,6 +76,7 @@ export const logout = async () => {
 
 const callApi = async function (url: string, method = "GET", body = {}) {
   	try {
+		console.log(url);
     	let response;
     	if (method === "GET") {
      	 	response = await axios.get(url);

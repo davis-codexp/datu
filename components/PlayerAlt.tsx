@@ -64,7 +64,7 @@ export default function PlayerAlt({ story, closeHandler }: PlayerAltProps) {
 					{story?.tags?.join(", ")}
 				</Text>
 				<Slider
-					style={{ width: "100%", marginTop: -10 }}
+					style={{ width: "100%", marginTop: -6 }}
 					minimumValue={0}
 					maximumValue={Math.floor(playerStatus?.duration || 1)}
 					value={Math.floor(playerStatus?.currentTime || 0)}
@@ -74,7 +74,7 @@ export default function PlayerAlt({ story, closeHandler }: PlayerAltProps) {
 					thumbTintColor="transparent"
 					onSlidingComplete={slideHandler}
 				/>
-				<View style={[mainStyles.ribbon, { marginTop: -10, paddingHorizontal: 5 }]}>
+				<View style={[mainStyles.ribbon, { marginTop: -8, paddingHorizontal: 5 }]}>
 					<Text style={[mainStyles.buttonText, mainStyles.extraSmallText]}>{formatDuration(playerStatus.currentTime)}</Text>
 					<Text style={[mainStyles.buttonText, mainStyles.extraSmallText]}>{formatDuration(playerStatus.duration)}</Text>
 				</View>
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
 		flexWrap: "wrap",
   	},
 	modalButton: {
-    	padding: 10,
+    	padding: 8,
     	borderRadius: 50,
     	backgroundColor: "gray",
 		height: 50,

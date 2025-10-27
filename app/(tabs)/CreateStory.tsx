@@ -85,7 +85,7 @@ export default function CreateStory() {
 	};
 
 	function handleCreate() {
-    	if (age && gender && selectedTags && duration) {
+		if (age && gender && selectedTags.length > 0 && duration) {
 			setIsLoading(true);
       		asyncHandler(
         		async () => {
@@ -143,7 +143,7 @@ export default function CreateStory() {
 					</View>
 					<View style={styles.optionContainer}>
 						<View style={styles.dropdownItem}>
-							<Text style={[mainStyles.buttonText, mainStyles.smallText]}>Age</Text>
+							<Text style={[mainStyles.buttonText, mainStyles.smallText]}>Age <Text style={{ color: "red" }}>*</Text></Text>
 							<DropDownPicker
 								open={openAge}
 								value={age}
@@ -157,7 +157,7 @@ export default function CreateStory() {
 							/>
 						</View>
 						<View style={styles.dropdownItem}>
-							<Text style={[mainStyles.buttonText, mainStyles.smallText]}>Duration</Text>
+							<Text style={[mainStyles.buttonText, mainStyles.smallText]}>Duration <Text style={{ color: "red" }}>*</Text></Text>
 							<DropDownPicker
 								open={openDuration}
 								value={duration}
@@ -171,7 +171,7 @@ export default function CreateStory() {
 							/>
 						</View>
 						<View style={styles.dropdownItem}>
-							<Text style={[mainStyles.buttonText, mainStyles.smallText]}>Gender</Text>
+							<Text style={[mainStyles.buttonText, mainStyles.smallText]}>Gender <Text style={{ color: "red" }}>*</Text></Text>
 							<DropDownPicker
 								open={openGender}
 								value={gender}
@@ -191,7 +191,7 @@ export default function CreateStory() {
 					</View>
 					<View style={[mainStyles.ribbon, { paddingHorizontal: 5, marginTop: 10, alignItems: "center" }]}>
 						<View style={{ width: "75%" }}>
-							<Text style={[mainStyles.buttonText, mainStyles.smallText]}>Search Genre</Text>
+							<Text style={[mainStyles.buttonText, mainStyles.smallText]}>Search Genre <Text style={{ color: "red" }}>*</Text></Text>
 							<InputBoxGradient
 								placeholder="Search Genre"
 								isSecureText={false}

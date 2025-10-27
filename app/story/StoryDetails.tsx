@@ -7,7 +7,6 @@ import Player from "@/components/Player";
 import Ionicons from "@react-native-vector-icons/ionicons"
 import { useLocalSearchParams, router } from "expo-router";
 import { Story } from "@/utils/types";
-import { formatDuration } from "@/utils/helpers";
 
 export default function StoryDetails() {
 	const [showPlayer, setShowPlayer] = useState(false);
@@ -19,6 +18,7 @@ export default function StoryDetails() {
 			<Image
 				source={{ uri: story?.thumbnail }}
 				style={{ height: "32%", width: "100%" }}
+				resizeMode="contain"
 			/>
 			<SafeAreaView style={styles.content}>
 				<TouchableOpacity style={styles.backBtn} onPress={router.back}>
@@ -66,14 +66,11 @@ export default function StoryDetails() {
 
 const styles = StyleSheet.create({
 	titleContainer: {
-		position: "absolute",
-		zIndex: 1,
-		top: "1%",
 		paddingLeft: 20,
 	},
 	titleText: {
 		color: "#FAFAFA",
-		fontSize: 28,
+		fontSize: 24,
 		fontWeight: "700",
 		textAlign: "left",
 	},	
@@ -107,7 +104,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#100D18",
 	},
 	scroll: {
-		marginTop: "20%",
+		marginTop: 10,
 		paddingHorizontal: 20,
 		maxHeight: "65%",
 	},
@@ -121,6 +118,6 @@ const styles = StyleSheet.create({
 		padding: 5,
 		position: "absolute",
 		left: "5%",
-		top: "-45%",
+		top: "-42%",
 	},
 });

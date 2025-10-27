@@ -16,7 +16,7 @@ export default function _Layout() {
 				tabBarStyle: {
 					backgroundColor: "#100D18",
 					marginBottom: 20,
-					height: 52,
+					height: 51,
 					position: "absolute",
 					overflow: "hidden",
 					borderColor: "#100D18",
