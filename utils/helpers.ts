@@ -39,6 +39,16 @@ export function capitalizeFirstLetter(str: string | null | undefined): string | 
   return str?.substring(0, 1)?.toUpperCase() + str?.substring(1);
 };
 
+export function getFirstName(str: string): string {
+	const arr = str.split(" ");
+	if (arr.length > 0) return arr[0];
+	return str;
+}
+
+export function getMins(duration: number): string {
+	return duration > 1 ? "mins" : "min";
+}
+
 export function formatTags(tags: string[]): string {
 	let str = "";
 	for (const tag of tags) {

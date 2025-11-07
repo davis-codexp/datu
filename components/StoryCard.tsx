@@ -5,6 +5,7 @@ import {
 import { Story } from "@/utils/types";
 import Ionicons from "@react-native-vector-icons/ionicons";
 import { router } from "expo-router";
+import { getMins } from "@/utils/helpers";
 
 type CardProps = {
 	story: Story,
@@ -26,7 +27,7 @@ export default function StoryCard({ story, clickHandler }: CardProps) {
 					<View style={{ backgroundColor: "#161128", opacity: 0.9, padding: 10 }}>
 						<Text style={styles.title}>{story?.title}</Text>
 						<Text numberOfLines={1} style={styles.subtitle}>{story?.tags?.join(", ")}</Text>
-						<Text style={styles.subtitle}>{story?.duration} mins read</Text>
+						<Text style={styles.subtitle}>{story?.duration} {getMins(story?.duration ?? 1)} read</Text>
 						<TouchableOpacity style={styles.playButton} onPress={() => clickHandler(story)}>
 							<Ionicons name="play-outline" size={18} color="#FAFAFA" />
 						</TouchableOpacity>
@@ -52,7 +53,6 @@ const styles = StyleSheet.create({
 	},
 	overlay: {
 		flex: 1,
-		backgroundColor: "rgba(0, 0, 0, 0.5)",
 		justifyContent: "flex-end",
 	},
 	badge: {
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
 		fontWeight: "700",
 	},
 	subtitle: {
-		color: "#9A8E86",
+		color: "#FAF6F2",
 		fontSize: 10,
 		fontWeight: "400",
 	},

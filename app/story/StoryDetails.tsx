@@ -7,6 +7,7 @@ import Player from "@/components/Player";
 import Ionicons from "@react-native-vector-icons/ionicons"
 import { useLocalSearchParams, router } from "expo-router";
 import { Story } from "@/utils/types";
+import { getMins } from "@/utils/helpers";
 
 export default function StoryDetails() {
 	const [showPlayer, setShowPlayer] = useState(false);
@@ -15,30 +16,33 @@ export default function StoryDetails() {
 
 	return (
 		<View style={{ flex: 1}}>
-			<Image
-				source={{ uri: story?.thumbnail }}
-				style={{ height: "32%", width: "100%" }}
-				resizeMode="contain"
-			/>
 			<SafeAreaView style={styles.content}>
+				<Image
+					source={{ uri: story?.thumbnail }}
+					style={{ height: "35%", width: "100%", backgroundColor: "#100D18" }}
+					resizeMode="cover"
+				/>
 				<TouchableOpacity style={styles.backBtn} onPress={router.back}>
-					<Ionicons name="chevron-back" size={24} color="#FAFAFA" />
+					<Ionicons name="chevron-back" size={24} color="#FFFFFF" />
 				</TouchableOpacity>
-				<View style={styles.titleContainer}>
-					<Text style={styles.titleText}>{story?.title}</Text>
-					<Text style={[mainStyles.smallText, { color: "#FAFAFA", opacity: 0.8, marginVertical: 3 }]}>{story?.duration} min</Text>
-					<View style={[mainStyles.row, {justifyContent: "flex-start"}]}>
-						{story?.tags?.splice(0, 3)?.map((tag: string) => (
-							<TouchableOpacity key={tag} style={styles.tagItem}>
-								<Text style={{ color: "white" }}>{tag?.toUpperCase()}</Text>
-							</TouchableOpacity>
-						))}
-					</View>
-				</View>
 				<ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
-					<Text style={[mainStyles.buttonText, { fontSize: 14, lineHeight: 22, letterSpacing: 0.15, textAlign: "justify" }]}>
+					<View style={styles.titleContainer}>
+						<Text style={styles.titleText}>{story?.title}</Text>
+						<Text style={[mainStyles.smallText, { color: "#FFFFFF", marginVertical: 3 }]}>{story?.duration} {getMins(story?.duration ?? 1)}</Text>
+						<View style={[mainStyles.row, {justifyContent: "flex-start"}]}>
+							{story?.tags?.splice(0, 3)?.map((tag: string) => (
+								<TouchableOpacity key={tag} style={styles.tagItem}>
+									<Text style={[mainStyles.extraSmallText, mainStyles.buttonText]}>{tag?.toUpperCase()}</Text>
+								</TouchableOpacity>
+							))}
+						</View>
+					</View>
+					<View style={{ paddingHorizontal: 10 }}>
+						<Text style={[mainStyles.buttonText, { fontSize: 16, lineHeight: 22 }]}>
 						{story?.text}	
-					</Text>
+						</Text>
+					</View>
+					
 				</ScrollView>
 				{showPlayer ? (
 					<Player source={story?.audio ?? ""} />
@@ -66,19 +70,21 @@ export default function StoryDetails() {
 
 const styles = StyleSheet.create({
 	titleContainer: {
+		marginTop: 10,
 		paddingLeft: 20,
 	},
 	titleText: {
-		color: "#FAFAFA",
-		fontSize: 24,
+		color: "#FFFFFF",
+		fontSize: 20,
 		fontWeight: "700",
 		textAlign: "left",
 	},	
 	tagItem: {
 		backgroundColor: "#464669",
 		borderRadius: 20,
-		padding: 8,
-		margin: 5,
+		paddingVertical: 4,
+		paddingHorizontal: 8,
+		margin: 3,
 	},
 	gradient: {
 		marginVertical: 5,
@@ -105,7 +111,7 @@ const styles = StyleSheet.create({
 	},
 	scroll: {
 		marginTop: 10,
-		paddingHorizontal: 20,
+		paddingHorizontal: 5,
 		maxHeight: "65%",
 	},
 	backBtn: {
@@ -118,6 +124,6 @@ const styles = StyleSheet.create({
 		padding: 5,
 		position: "absolute",
 		left: "5%",
-		top: "-42%",
+		top: "6%",
 	},
 });

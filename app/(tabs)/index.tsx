@@ -9,7 +9,7 @@ import Profile from "@/components/Profile";
 import StoryList from "@/components/StoryList";
 import Header from "@/components/Header";
 import { router } from "expo-router";
-import { getItem, asyncHandler, capitalizeFirstLetter } from "@/utils/helpers";
+import { getItem, asyncHandler, capitalizeFirstLetter, getFirstName } from "@/utils/helpers";
 import { Credentials } from "@/utils/types";
 
 export default function Home() {
@@ -35,8 +35,7 @@ export default function Home() {
 				<Header clickHandler={() => setShowProfile(true)} image={credentials?.user?.image} />
 				<View style={styles.content}>
 					<View style={{ marginVertical: 10 }}>
-						<Text style={[mainStyles.largeText, mainStyles.boldText, mainStyles.buttonText]}>Hi {capitalizeFirstLetter(credentials?.user?.name)}!</Text>
-						<Text style={[mainStyles.largeText, mainStyles.boldText, mainStyles.buttonText]}>Create amazing tales</Text>
+						<Text style={[mainStyles.largeText, mainStyles.boldText, mainStyles.buttonText]}>Hi {capitalizeFirstLetter(getFirstName(credentials?.user?.name ?? ""))}!</Text>
 					</View>
 					<ButtonGradient
 						label="Create your own Story"
@@ -44,7 +43,7 @@ export default function Home() {
 					/>
 				</View>
 				<StoryList
-					listHeight={Platform.OS === "android" ? "65%" : "70%"}
+					listHeight={Platform.OS === "android" ? "71%" : "75%"}
 					playerPosition="68%"
 				/>
 			</View>

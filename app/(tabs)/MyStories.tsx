@@ -25,7 +25,7 @@ export default function MyStories() {
 		<Container>
 			<View style={mainStyles.mainContent}>
 				<Header clickHandler={() => setShowProfile(true)} image={credentials?.user?.image} />
-				<StoryList listHeight="80%" playerPosition="81%" />
+				<StoryList listHeight="83%" playerPosition="81%" />
 				{credentials &&
 					<Modal
 						animationType="fade"

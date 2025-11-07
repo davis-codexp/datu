@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { Stack, Redirect } from "expo-router";
-import { StatusBar, View, Platform } from "react-native";
+import { StatusBar, View, Platform, useColorScheme } from "react-native";
 import Toast from "react-native-toast-message";
 import { getItem, asyncHandler } from "@/utils/helpers";
 import { setAuthHeader } from "@/utils/api";
 import { Credentials } from "@/utils/types";
 
 export default function RootLayout() {
+	const colorScheme = useColorScheme();
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 
@@ -32,8 +33,8 @@ export default function RootLayout() {
 				<Redirect href="/auth/login" />
 			)}
 			<StatusBar
-				barStyle="light-content"
-				backgroundColor="#221B38"
+				style="light"
+				backgroundColor="#100D18"
 			/>
 			<Stack
 				screenOptions={{ animation: Platform.OS === "android" ? "none" : "default" }}

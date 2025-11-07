@@ -1,6 +1,7 @@
 import { Tabs } from "expo-router";
 import { Text, StyleSheet, View } from "react-native";
 import { Ionicons } from "@react-native-vector-icons/ionicons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type TabProps = {
 	focused: boolean;
@@ -9,17 +10,19 @@ type TabProps = {
 };
 
 export default function _Layout() {
+	const insets = useSafeAreaInsets();
+
 	return (
 		<Tabs
 			screenOptions={{
 				tabBarShowLabel: false,
 				tabBarStyle: {
 					backgroundColor: "#100D18",
-					marginBottom: 20,
-					height: 51,
-					position: "absolute",
+					marginBottom: 0,
+					height: 60 + insets.bottom,
 					overflow: "hidden",
 					borderColor: "#100D18",
+					paddingBottom: insets.bottom,
 				},
 			}}
 		>
@@ -62,11 +65,11 @@ function TabIcon(props: TabProps) {
 		<View style={styles.tab}>
 			<Ionicons
 				name={props.iconName}
-				color={props?.focused ? "red" : "#FAFAFA" }
+				color={props?.focused ? "#4947A1" : "#FAFAFA" }
 				size={24}
 			/>		
 			<Text
-				style={[styles.tabText, { color: props?.focused ? "red" : "#FAFAFA" }]}
+				style={[styles.tabText, { color: props?.focused ? "#4947A1" : "#FAFAFA" }]}
 			>{props.tabName}</Text>
 		</View>
 	);

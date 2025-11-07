@@ -104,10 +104,6 @@ export default function Profile({ onClose, cred, setCredentials }: ProfileProps)
 					<Text style={styles.label}>Email</Text>
 					<Text style={[mainStyles.buttonText, mainStyles.smallText, mainStyles.boldText]}>{cred?.user?.email}</Text>
 				</View>
-				<View style={styles.segment}>
-					<Text style={styles.label}>Gender</Text>
-					<Text style={[mainStyles.buttonText, mainStyles.smallText, mainStyles.boldText]}>{cred?.user?.gender}</Text>
-				</View>
 				<View style={[mainStyles.ribbon, { marginTop: 20, paddingRight: 40 }]}>
 					<View></View>	
 					<TouchableOpacity onPress={() => setShowModal(true)} style={[mainStyles.row, { alignItems: "center" }]}>

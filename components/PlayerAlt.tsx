@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from "react-native";
-import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Image, Platform } from "react-native";
+import { useAudioPlayer, useAudioPlayerStatus, setAudioModeAsync } from "expo-audio";
 import Ionicons from "@react-native-vector-icons/ionicons";
 import Slider from "@react-native-community/slider";
 import { mainStyles } from "@/utils/styles";
@@ -27,12 +27,19 @@ export default function PlayerAlt({ story, closeHandler }: PlayerAltProps) {
 	useEffect(() => {
 		if (playerStatus?.isLoaded) {
 			setIsPlaying(true);
+			setAudioModeAsync({
+      			playsInSilentMode: true,
+      			shouldPlayInBackground: true,
+    		});
 			player.play();
 		}
 	}, [playerStatus?.isLoaded]);
 
-	const setRate = (rate: number) => {
-		player.setPlaybackRate(rate);
+	const setRate = async (rate: number) => {
+		if (Platform.OS === "android") {
+			player.shouldCorrectPitch = true;
+		}
+		await player.setPlaybackRate(rate);
 		setPlaybackRate(rate);
 	};
 	const toggleModal = () => setShowModal(prev => !prev);
@@ -137,7 +144,7 @@ export default function PlayerAlt({ story, closeHandler }: PlayerAltProps) {
 							</TouchableOpacity>
 						</View>
 						<View style={styles.modalButtons}>
-							{[0.5, 0.75, 1, 1.25, 1.75, 2].map((rate: number) => (
+							{[0.75, 0.9, 1, 1.1, 1.25].map((rate: number) => (
 								<TouchableOpacity
 									key={rate}
 									style={[styles.modalButton, playbackRate === rate && styles.modalButtonSelected ]}

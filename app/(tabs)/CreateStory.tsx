@@ -1,5 +1,9 @@
-import { useState, useEffect } from "react";
-import { View, Modal, ScrollView, Text, ActivityIndicator, TouchableOpacity, StyleSheet, Keyboard } from "react-native";
+import { useState, useEffect, useRef } from "react";
+import {
+	View, Modal, ScrollView, Text, ActivityIndicator,
+	TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback,
+	TextInput,
+} from "react-native";
 import Container from "@/components/Container";
 import { mainStyles } from "@/utils/styles";
 import { InputBoxGradient, ButtonGradient } from "@/components/common";
@@ -17,19 +21,19 @@ type Option = {
 	value: string;
 };
 export default function CreateStory() {
+	const inputRef = useRef(null);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [ageOptions, setAgeOptions] = useState<Option[]>([]);
 	const [durationOptions, setDurationOptions] = useState<Option[]>([]);
 	const [tags, setTags] = useState<string[]>([]);
-	const [popularTags, setPopularTags] = useState<string[]>([]);
 	const [selectedTags, setSelectedTags] = useState<string[]>([]);
 	const [filteredTags, setFilteredTags] = useState<string[]>([]);
 	const [openAge, setOpenAge] = useState(false);
 	const [openDuration, setOpenDuration] = useState(false);
 	const [openGender, setOpenGender] = useState(false);
-	const [age, setAge] = useState("1");
+	const [age, setAge] = useState("3");
 	const [duration, setDuration] = useState("1");
-	const [gender, setGender] = useState("male");
+	const [gender, setGender] = useState("both");
 	const [showProfile, setShowProfile] = useState(false);
 	const [credentials, setCredentials] = useState<Credentials | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
@@ -50,7 +54,6 @@ export default function CreateStory() {
 				setDurationOptions(durationArr);
 				const { categories } = response?.result;
 				setTags(categories ?? []);
-				if (categories?.length) setPopularTags(categories?.splice(0, 7));
 			}
 			const cred = await getItem("credentials");
 			if (cred) {
@@ -109,7 +112,7 @@ export default function CreateStory() {
               				const storyResponse = await getStoryById(result?.message ?? "");
               				if (storyResponse?.success && storyResponse?.result) {
                 				story.thumbnail = storyResponse?.result?.thumbnail ?? "";
-								setAge("1");
+								setAge("3");
 								setDuration("1");
 								setSelectedTags([]);
 								router.push({
@@ -129,17 +132,29 @@ export default function CreateStory() {
     	} else {
       		showNotification("error", "Please fill all the fields");
     	}
-  	}
+	}
+
+	const closeDropdowns = () => {
+		setOpenAge(false);
+		setOpenGender(false);
+		setOpenDuration(false);
+	};
+
+	const selectHandler = () => {
+		if (inputRef && inputRef.current) {
+			inputRef.current?.blur();
+		}
+	};
 
 	if (isLoading) return <Container><Loader /></Container>;
-	return (
+	return (	
 		<Container>
+			<TouchableWithoutFeedback onPress={closeDropdowns}>
 			<View style={[mainStyles.mainContent]}>
 				<Header clickHandler={() => setShowProfile(true)} image={credentials?.user?.image} />	
 				<View style={styles.content}>
 					<View style={{ marginVertical: 10 }}>
-						<Text style={[mainStyles.largeText, mainStyles.boldText, mainStyles.buttonText]}>Create your own</Text>
-						<Text style={[mainStyles.largeText, mainStyles.boldText, mainStyles.buttonText]}>amazing tales</Text>
+						<Text style={[mainStyles.largeText, mainStyles.boldText, mainStyles.buttonText]}>Create your own story</Text>
 					</View>
 					<View style={styles.optionContainer}>
 						<View style={styles.dropdownItem}>
@@ -154,6 +169,9 @@ export default function CreateStory() {
 								textStyle={styles.dropdownText}
 								dropDownContainerStyle={styles.dropdownList}
 								listItemLabelStyle={styles.listItem}
+								tickIconStyle={{ display: "none" }}
+								selectedItemContainerStyle={{ paddingLeft: 16 }}
+								onSelectItem={selectHandler}
 							/>
 						</View>
 						<View style={styles.dropdownItem}>
@@ -168,6 +186,8 @@ export default function CreateStory() {
 								textStyle={styles.dropdownText}
 								dropDownContainerStyle={styles.dropdownList}
 								listItemLabelStyle={styles.listItem}
+								tickIconStyle={{ display: "none" }}
+								selectedItemContainerStyle={{ paddingLeft: 16 }}
 							/>
 						</View>
 						<View style={styles.dropdownItem}>
@@ -186,17 +206,27 @@ export default function CreateStory() {
 								textStyle={styles.dropdownText}
 								dropDownContainerStyle={styles.dropdownList}
 								listItemLabelStyle={styles.listItem}
+								tickIconStyle={{ display: "none" }}
+								selectedItemContainerStyle={{ paddingLeft: 16 }}
 							/>
 						</View>
 					</View>
 					<View style={[mainStyles.ribbon, { paddingHorizontal: 5, marginTop: 10, alignItems: "center" }]}>
 						<View style={{ width: "75%" }}>
 							<Text style={[mainStyles.buttonText, mainStyles.smallText]}>Search Genre <Text style={{ color: "red" }}>*</Text></Text>
-							<InputBoxGradient
+							{/*<InputBoxGradient
 								placeholder="Search Genre"
 								isSecureText={false}
 								changeHandler={handleSearch}
 								value={searchQuery}
+							/>*/}
+							<TextInput
+								ref={inputRef}
+								placeholder="Search Genre"
+								onChangeText={handleSearch}
+								value={searchQuery}
+								style={styles.input}
+								placeholderTextColor="rgba(255, 255, 255, 0.5)"
 							/>
 						</View>
 						<TouchableOpacity onPress={addTag} style={[mainStyles.row, { alignItems: "center", justifyContent: "center" }]}>
@@ -204,7 +234,7 @@ export default function CreateStory() {
 							<Text style={[mainStyles.buttonText]}>Add</Text>
 						</TouchableOpacity>
 					</View>
-					<ScrollView style={{ marginBottom: 20, minHeight: 100, maxHeight: 300 }} keyboardShouldPersistTaps="always">
+					<View style={{ marginBottom: 20 }}>
 						{searchQuery?.length > 0 &&
 							<View style={[mainStyles.row]}>
 								{filteredTags?.map((tag: string) => (
@@ -217,26 +247,31 @@ export default function CreateStory() {
 						{selectedTags?.length > 0 && (
 							<>
 								<Text style={[mainStyles.buttonText, mainStyles.smallText, { marginTop: 5, marginHorizontal: 5 }]}>Selected Genres</Text>
-								<View style={[mainStyles.row]}>
-									{selectedTags?.map((tag: string) => (
-										<TouchableOpacity onPress={() => unselect(tag)} key={tag} style={styles.tagItem}>
-											<Text style={{ color: "#FAFAFA", textTransform: "capitalize" }}>{tag}</Text>
-										</TouchableOpacity>
-									))}
-								</View>
+								<ScrollView style={{ height: "15%" }}>
+									<View style={[mainStyles.row]}>
+										{selectedTags?.map((tag: string) => (
+											<TouchableOpacity onPress={() => unselect(tag)} key={tag} style={styles.tagItem}>
+												<Text style={{ color: "#FAFAFA", textTransform: "capitalize" }}>{tag}</Text>
+											</TouchableOpacity>
+										))}
+									</View>
+								</ScrollView>
 							</>
 						)}
 						<>
 							<Text style={[mainStyles.buttonText, mainStyles.smallText, { marginTop: 5, marginHorizontal: 5 }]}>Popular Genres</Text>
-							<View style={[mainStyles.row]}>
-								{popularTags?.map((tag: string) => (
-									<TouchableOpacity onPress={() => handleSelect(tag)} key={tag} style={styles.tagItem}>
-										<Text style={{ color: "#FAFAFA", textTransform: "capitalize" }}>{tag}</Text>
-									</TouchableOpacity>
-								))}
-							</View>
+							<ScrollView style={{ height: "28%" }}>
+								<View style={[mainStyles.row]}>
+									{tags?.map((tag: string) => (
+										<TouchableOpacity onPress={() => handleSelect(tag)} key={tag} style={styles.tagItem}>
+											<Text style={{ color: "#FAFAFA", textTransform: "capitalize" }}>{tag}</Text>
+										</TouchableOpacity>
+									))}
+								</View>
+							</ScrollView>
 						</>
-					</ScrollView>
+						
+					</View>
 					<ButtonGradient
 						label="Create Story"
 						clickHandler={handleCreate}
@@ -257,7 +292,8 @@ export default function CreateStory() {
 					</Modal>
 				}
 			</View>
-		</Container>
+			</TouchableWithoutFeedback>
+		</Container>	
 	);
 }
 
@@ -266,7 +302,7 @@ function Loader() {
 		<View style={{ paddingHorizontal: 20}}>
 			<ActivityIndicator size="large" color="#FAFAFA" />
 			<Text style={[{ marginTop: 20 }, mainStyles.boldText, mainStyles.buttonText, mainStyles.largeText]}>
-            	Crafting a story for you. This might a take a minute. 
+            	Crafting a story for you. This might take a minute. 
           </Text>
 		</View>
 	)
@@ -313,4 +349,12 @@ const styles = StyleSheet.create({
 		padding: 8,
 		margin: 5,
 	},
+	input: {
+		width: "100%",
+    	color: "#FFE8D9",
+    	paddingHorizontal: 15,
+    	fontSize: 16,
+		backgroundColor: "#252538",
+		borderRadius: 20,
+  	},
 });
